@@ -56,6 +56,7 @@ library
     , semantic-reflex
     , transformers
     , text
+    , time
 
     -- For example code generation
     , ghc-prim
@@ -66,7 +67,7 @@ library
 
   if impl(ghcjs)
     build-depends: ghcjs-base
-    cpp-options: -DGHCJS_GC_INTERVAL=60000
+--    cpp-options: -DGHCJS_GC_INTERVAL=60000
 
   ghc-options: -Wall -Wno-unused-do-bind -Wno-type-defaults
 
@@ -86,5 +87,4 @@ executable semantic-reflex-example
   if impl(ghcjs)
     build-depends: reflex-dom
     ghc-options: -dedupe
-    cpp-options: -DGHCJS_GC_INTERVAL=60000
-
+--    cpp-options: -DGHCJS_GC_INTERVAL=60000

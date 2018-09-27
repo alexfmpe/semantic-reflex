@@ -52,6 +52,9 @@ import Example.Section.Progress (progressSection)
 import Example.Section.RadioGroup (radioGroups)
 import Example.Section.Transition (transitions)
 
+import Data.Time.Clock
+import Control.Monad.IO.Class
+
 data Category t m = Category
   { categoryName :: Text
   , categoryItems :: [(Text, Status, Maybe (Section t m))]
@@ -134,6 +137,11 @@ progressProgress = progress (pure $ Range 0 vMax) (pure v) $ def
 
 intro :: forall t m. (RouteWriter t Text m, MonadWidget t m) => Section t m
 intro = Section "Introduction" blank $ do
+  tick <- tickLossy 0.01 =<< liftIO getCurrentTime
+  widgetHold (text "loading") $ ffor tick $ \t ->
+    void $ searchDropdown (def
+      & dropdownConfig_placeholder |~ (tshow (_tickInfo_n t) <> ": " <> tshow (_tickInfo_alreadyElapsed t))) "" $ TaggedDynamic $ constDyn []
+
   paragraph $ do
     text "This library aims to provide a type safe Haskell wrapper around Semantic UI components, to allow easy construction of nice looking web applications in GHCJS. It is currently in early development and started as a fork of the "
     hyperlink "https://github.com/reflex-frp/reflex-dom-semui" $
